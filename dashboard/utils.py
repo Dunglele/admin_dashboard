@@ -5,7 +5,9 @@ def call_api(method, endpoint, token=None, data=None):
     """
     Hàm tiện ích để gọi FastAPI Backend.
     """
-    url = f"{settings.API_BASE_URL}{endpoint}"
+    base_url = settings.API_BASE_URL.rstrip('/')
+    url = f"{base_url}{endpoint}"
+
     headers = {}
     if token:
         headers["Authorization"] = f"Bearer {token}"
