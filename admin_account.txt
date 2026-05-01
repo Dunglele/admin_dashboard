@@ -1,0 +1,6 @@
+THÔNG TIN TÀI KHOẢN ADMIN
+-------------------------
+Email: admin@shop.com
+Mật khẩu: admin12345
+Vai trò: Quản trị viên (Admin)
+Ngày tạo: 17/04/2026

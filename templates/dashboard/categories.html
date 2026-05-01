@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Quản lý Danh mục - Admin Panel{% endblock %}
+{% block page_title %}Danh sách Danh mục{% endblock %}
+
+{% block content %}
+<div style="background: white; padding: 25px; border-radius: 10px; margin-bottom: 30px;">
+    <h4>Thêm Danh mục Mới</h4>
+    <form method="POST" style="display: flex; gap: 15px; margin-top: 15px;">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="create">
+        <input type="text" name="name" class="form-control" placeholder="Tên danh mục" required>
+        <input type="url" name="image_url" class="form-control" placeholder="URL ảnh danh mục">
+        <button type="submit" class="btn btn-success">Thêm mới</button>
+    </form>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Ảnh</th>
+            <th>Tên Danh mục</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cat in categories %}
+        <tr>
+            <td>{{ cat.id }}</td>
+            <td>
+                {% if cat.image_url %}
+                    <img src="{{ cat.image_url }}" alt="{{ cat.name }}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid #eee;">
+                {% else %}
+                    <div style="width: 80px; height: 80px; background: #eee; display: flex; align-items: center; justify-content: center; border-radius: 8px; color: #999;">No Image</div>
+                {% endif %}
+            </td>
+            <td style="font-size: 1.1rem;"><strong>{{ cat.name }}</strong></td>
+            <td>
+                <form method="POST" onsubmit="return confirm('Bạn có chắc muốn xóa danh mục này?')">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="delete">
+                    <input type="hidden" name="id" value="{{ cat.id }}">
+                    <button type="submit" class="btn btn-danger">Xóa</button>
+                </form>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4" style="text-align: center;">Chưa có danh mục nào.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

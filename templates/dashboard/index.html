@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Tổng quan - Admin Panel{% endblock %}
+{% block page_title %}Bảng điều khiển tổng quan{% endblock %}
+
+{% block content %}
+<div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+    <div class="stat-card" style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center;">
+        <h1 style="color: var(--accent-color); font-size: 2.5rem;">{{ total_products }}</h1>
+        <p style="color: #777; font-weight: 500;">Sản phẩm</p>
+    </div>
+    <div class="stat-card" style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center;">
+        <h1 style="color: var(--success); font-size: 2.5rem;">{{ total_categories }}</h1>
+        <p style="color: #777; font-weight: 500;">Danh mục</p>
+    </div>
+    <div class="stat-card" style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center;">
+        <h1 style="color: #f39c12; font-size: 2.5rem;">{{ total_orders }}</h1>
+        <p style="color: #777; font-weight: 500;">Đơn hàng</p>
+    </div>
+    <div class="stat-card" style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center;">
+        <h1 style="color: var(--primary-color); font-size: 2.5rem;">{{ total_users }}</h1>
+        <p style="color: #777; font-weight: 500;">Người dùng</p>
+    </div>
+</div>
+
+<div class="quick-actions" style="margin-top: 40px;">
+    <h3>Thao tác nhanh</h3>
+    <div style="display: flex; gap: 15px; margin-top: 15px;">
+        <a href="{% url 'products' %}" class="btn btn-primary">Quản lý Sản phẩm</a>
+        <a href="{% url 'orders' %}" class="btn btn-success">Kiểm tra Đơn hàng</a>
+    </div>
+</div>
+{% endblock %}

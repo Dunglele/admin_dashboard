@@ -1,0 +1,18 @@
+{
+  "builds": [
+    {
+      "src": "admin_fe/wsgi.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "admin_fe/wsgi.py"
+    }
+  ]
+}

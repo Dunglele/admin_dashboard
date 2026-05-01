@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Quản lý Người dùng - Admin Panel{% endblock %}
+{% block page_title %}Danh sách Khách hàng & Quản trị{% endblock %}
+
+{% block content %}
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Họ và Tên</th>
+            <th>Email</th>
+            <th>Vai trò</th>
+            <th>Ngày tham gia</th>
+            <th>Trạng thái</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td><strong>{{ user.full_name }}</strong></td>
+            <td>{{ user.email }}</td>
+            <td>
+                <span style="background: {% if user.role == 'admin' %}#6c5ce7; color: white{% else %}#dfe6e9{% endif %}; padding: 3px 8px; border-radius: 4px; font-size: 0.8rem;">
+                    {{ user.role|upper }}
+                </span>
+            </td>
+            <td>{{ user.created_at|date:"d/m/Y" }}</td>
+            <td>
+                {% if user.is_active %}
+                    <span style="color: var(--success);">● Đang hoạt động</span>
+                {% else %}
+                    <span style="color: var(--danger);">● Bị khóa</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

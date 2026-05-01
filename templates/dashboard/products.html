@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Quản lý Sản phẩm - Admin Panel{% endblock %}
+{% block page_title %}Danh sách Sản phẩm{% endblock %}
+
+{% block content %}
+<div style="background: white; padding: 25px; border-radius: 10px; margin-bottom: 30px;">
+    <h4>Thêm Sản phẩm Mới</h4>
+    <form method="POST" style="margin-top: 15px;">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="create">
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+            <div class="form-group">
+                <label>Tên sản phẩm</label>
+                <input type="text" name="name" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>Giá (VNĐ)</label>
+                <input type="number" name="price" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>Kho hàng</label>
+                <input type="number" name="stock" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>Danh mục</label>
+                <select name="category_id" class="form-control" required>
+                    {% for cat in categories %}
+                    <option value="{{ cat.id }}">{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Kích cỡ (ví dụ: S, M, L)</label>
+                <input type="text" name="size" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Màu sắc</label>
+                <input type="text" name="color" class="form-control">
+            </div>
+            <div class="form-group" style="grid-column: span 3;">
+                <label>URL Hình ảnh</label>
+                <input type="url" name="image_url" class="form-control">
+            </div>
+            <div class="form-group" style="grid-column: span 3;">
+                <label>Mô tả sản phẩm</label>
+                <textarea name="description" class="form-control" rows="2"></textarea>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-success" style="width: 200px;">Thêm sản phẩm</button>
+    </form>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Ảnh</th>
+            <th>Tên & Mô tả</th>
+            <th>Giá</th>
+            <th>Kho</th>
+            <th>Phân loại</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for prod in products %}
+        <tr>
+            <td>
+                <img src="{{ prod.image_url }}" alt="{{ prod.name }}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;">
+            </td>
+            <td>
+                <strong>{{ prod.name }}</strong><br>
+                <small style="color: #888;">Size: {{ prod.size }} | Màu: {{ prod.color }}</small>
+            </td>
+            <td>{{ prod.price }}đ</td>
+            <td>
+                <span style="padding: 4px 8px; border-radius: 12px; background: {% if prod.stock > 10 %}#d4edda; color: #155724{% else %}#f8d7da; color: #721c24{% endif %};">
+                    {{ prod.stock }}
+                </span>
+            </td>
+            <td>
+                <span style="background: #e9ecef; padding: 3px 7px; border-radius: 4px; font-size: 0.8rem;">ID: {{ prod.category_id }}</span>
+            </td>
+            <td>
+                <form method="POST" onsubmit="return confirm('Xóa sản phẩm này?')">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="delete">
+                    <input type="hidden" name="id" value="{{ prod.id }}">
+                    <button type="submit" class="btn btn-danger">Xóa</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
