@@ -62,6 +62,16 @@ def categories_view(request):
             _, status_code = call_api("DELETE", f"/admin/categories/{cat_id}", token=token)
             if status_code == 200: messages.success(request, "Xóa danh mục thành công!")
             else: messages.error(request, "Lỗi khi xóa danh mục")
+        
+        elif action == "update":
+            cat_id = request.POST.get('id')
+            data = {
+                "name": request.POST.get('name'),
+                "image_url": request.POST.get('image_url')
+            }
+            _, status_code = call_api("PUT", f"/admin/categories/{cat_id}", token=token, data=data)
+            if status_code == 200: messages.success(request, "Cập nhật danh mục thành công!")
+            else: messages.error(request, "Lỗi khi cập nhật danh mục")
 
     cats, status_code = call_api("GET", "/admin/categories", token=token)
     if status_code != 200:
@@ -96,6 +106,22 @@ def products_view(request):
             _, status_code = call_api("DELETE", f"/admin/products/{prod_id}", token=token)
             if status_code == 200: messages.success(request, "Xóa sản phẩm thành công!")
             else: messages.error(request, "Lỗi khi xóa sản phẩm")
+
+        elif action == "update":
+            prod_id = request.POST.get('id')
+            data = {
+                "name": request.POST.get('name'),
+                "description": request.POST.get('description'),
+                "price": float(request.POST.get('price')),
+                "stock": int(request.POST.get('stock')),
+                "image_url": request.POST.get('image_url'),
+                "size": request.POST.get('size'),
+                "color": request.POST.get('color'),
+                "category_id": int(request.POST.get('category_id')),
+            }
+            _, status_code = call_api("PUT", f"/admin/products/{prod_id}", token=token, data=data)
+            if status_code == 200: messages.success(request, "Cập nhật sản phẩm thành công!")
+            else: messages.error(request, "Lỗi khi cập nhật sản phẩm")
 
     prods, _ = call_api("GET", "/admin/products", token=token)
     cats, _ = call_api("GET", "/admin/categories", token=token)

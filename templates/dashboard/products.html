@@ -82,15 +82,100 @@
                 <span style="background: #e9ecef; padding: 3px 7px; border-radius: 4px; font-size: 0.8rem;">ID: {{ prod.category_id }}</span>
             </td>
             <td>
-                <form method="POST" onsubmit="return confirm('Xóa sản phẩm này?')">
-                    {% csrf_token %}
-                    <input type="hidden" name="action" value="delete">
-                    <input type="hidden" name="id" value="{{ prod.id }}">
-                    <button type="submit" class="btn btn-danger">Xóa</button>
-                </form>
+                <div style="display: flex; gap: 5px;">
+                    <button class="btn btn-primary" onclick="openEditModal('{{ prod.id }}', '{{ prod.name }}', '{{ prod.price }}', '{{ prod.stock }}', '{{ prod.category_id }}', '{{ prod.size }}', '{{ prod.color }}', '{{ prod.image_url }}', '{{ prod.description|escapejs }}')">Sửa</button>
+                    <form method="POST" onsubmit="return confirm('Xóa sản phẩm này?')" style="margin:0;">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="id" value="{{ prod.id }}">
+                        <button type="submit" class="btn btn-danger">Xóa</button>
+                    </form>
+                </div>
             </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+
+<!-- Edit Modal -->
+<div id="editModal" style="display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.5); align-items:center; justify-content:center;">
+    <div style="background:white; padding:30px; border-radius:15px; width:800px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); max-height: 90vh; overflow-y: auto;">
+        <h4 style="margin-bottom:20px;">Chỉnh sửa Sản phẩm</h4>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="update">
+            <input type="hidden" name="id" id="edit_id">
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+                <div class="form-group">
+                    <label>Tên sản phẩm</label>
+                    <input type="text" name="name" id="edit_name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Giá (VNĐ)</label>
+                    <input type="number" name="price" id="edit_price" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Kho hàng</label>
+                    <input type="number" name="stock" id="edit_stock" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Danh mục</label>
+                    <select name="category_id" id="edit_category_id" class="form-control" required>
+                        {% for cat in categories %}
+                        <option value="{{ cat.id }}">{{ cat.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Kích cỡ</label>
+                    <input type="text" name="size" id="edit_size" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Màu sắc</label>
+                    <input type="text" name="color" id="edit_color" class="form-control">
+                </div>
+                <div class="form-group" style="grid-column: span 3;">
+                    <label>URL Hình ảnh</label>
+                    <input type="url" name="image_url" id="edit_image_url" class="form-control">
+                </div>
+                <div class="form-group" style="grid-column: span 3;">
+                    <label>Mô tả sản phẩm</label>
+                    <textarea name="description" id="edit_description" class="form-control" rows="3"></textarea>
+                </div>
+            </div>
+            
+            <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+                <button type="button" class="btn btn-danger" onclick="closeEditModal()" style="background:#666;">Hủy</button>
+                <button type="submit" class="btn btn-success">Lưu thay đổi</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openEditModal(id, name, price, stock, catId, size, color, imageUrl, desc) {
+        document.getElementById('edit_id').value = id;
+        document.getElementById('edit_name').value = name;
+        document.getElementById('edit_price').value = parseInt(price);
+        document.getElementById('edit_stock').value = stock;
+        document.getElementById('edit_category_id').value = catId;
+        document.getElementById('edit_size').value = size;
+        document.getElementById('edit_color').value = color;
+        document.getElementById('edit_image_url').value = imageUrl;
+        document.getElementById('edit_description').value = desc;
+        document.getElementById('editModal').style.display = 'flex';
+    }
+
+    function closeEditModal() {
+        document.getElementById('editModal').style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        let modal = document.getElementById('editModal');
+        if (event.target == modal) {
+            closeEditModal();
+        }
+    }
+</script>
 {% endblock %}
